@@ -36,7 +36,7 @@ let outputString = "";
 for (const customProperty of customProperties) {
   outputString = `${outputString}export const ${toCamelCase(
     customProperty
-  )} = "var(${customProperty})\n"`;
+  )} = "var(${customProperty})"\n`;
 }
 
 fs.appendFileSync("./customProperties.ts", outputString, {});
