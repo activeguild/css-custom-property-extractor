@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "extract": "tsx ./src/main.ts",
+    "tsx": "tsx ./src/cli.ts hoge",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -32,6 +33,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
+    "commander": "^9.4.1",
     "glob": "^8.0.3"
   }
 }
