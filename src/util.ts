@@ -5,7 +5,7 @@ export const regCustomProperty =
 
 export const getFinalOptions = (options: Options): FinalOptions => {
   return {
-    include: options.include || "**/*.?(css|scss|sass)",
+    include: options.include || "**/*.?(css|scss|sass|less)",
     exclude: options.exclude,
     output: options.output || "./properties.ts",
   };

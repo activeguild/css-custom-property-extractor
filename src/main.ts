@@ -6,7 +6,7 @@ import { getFinalOptions, regCustomProperty } from "./util";
 
 let loadedSassPreprocessor: any;
 
-export const main = (options: Options) => {
+export const main = async (options: Options) => {
   const finalOptions = getFinalOptions(options);
   const filePaths = glob.sync(finalOptions.include, {
     ignore: finalOptions.exclude,
@@ -28,6 +28,9 @@ export const main = (options: Options) => {
         customPropertyWithValues = result.css
           .toString()
           .match(regCustomProperty);
+      } else if (filePath.endsWith("less")) {
+        const less = loadLessPreprocessor();
+        const result = await less.render(fileContent);
       } else {
         customPropertyWithValues = fileContent.match(regCustomProperty);
       }
@@ -87,6 +90,24 @@ const loadSassPreprocessor = (): any => {
     console.error(e);
     throw new Error(
       `Preprocessor dependency 'sass' not found. Did you install it?`
+    );
+  }
+};
+
+const loadLessPreprocessor = (): any => {
+  try {
+    if (loadedSassPreprocessor) {
+      return loadedSassPreprocessor;
+    }
+    const fallbackPaths = require.resolve.paths?.("less") || [];
+    const resolved = require.resolve("less", {
+      paths: [__dirname, ...fallbackPaths],
+    });
+    return (loadedSassPreprocessor = require(resolved));
+  } catch (e) {
+    console.error(e);
+    throw new Error(
+      `Preprocessor dependency 'less' not found. Did you install it?`
     );
   }
 };
