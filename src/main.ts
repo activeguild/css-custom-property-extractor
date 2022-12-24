@@ -30,7 +30,11 @@ export const main = async (options: Options) => {
           .match(regCustomProperty);
       } else if (filePath.endsWith("less")) {
         const less = loadLessPreprocessor();
-        const result = await less.render(fileContent);
+        const result = await less.render(fileContent, {
+          paths: [path.dirname(filePath)],
+        });
+
+        customPropertyWithValues = result.css.match(regCustomProperty);
       } else {
         customPropertyWithValues = fileContent.match(regCustomProperty);
       }
