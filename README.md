@@ -1,5 +1,10 @@
 <h1 align="center">css-custom-property-extractor</h1>
 
+<p align="center">
+<a href="https://badge.fury.io/js/css-custom-property-extractor"><img src="https://badge.fury.io/js/css-custom-property-extractor.svg" alt="npm version" height="18"></a>
+<a href="https://github.com/actions/setup-node"><img alt="GitHub Actions status" src="https://github.com/activeguild/css-custom-property-extractor/workflows/automatic%20release/badge.svg" style="max-width: 100%;"></a>
+</p>
+
 ## Intro
 
 - Parse css custom properties and output typescript files.By importing the output typescript files<br/>
