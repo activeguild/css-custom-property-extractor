@@ -1,0 +1,24 @@
+name: check
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  calculate-size:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - uses: sarthak-saxena/JSBundleSize@master
+        with:
+          bootstrap: "npm ci"
+          build_command: "npm run build"
+          dist_path: "dist"
+          token: ${{ secrets.GITHUB_TOKEN }}
