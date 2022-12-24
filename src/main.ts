@@ -19,7 +19,7 @@ export const main = async (options: Options) => {
       const fileContent = buffer.toString();
       let customPropertyWithValues: RegExpMatchArray | null = null;
 
-      if (filePath.endsWith(".scss") || filePath.endsWith("sass")) {
+      if (filePath.endsWith(".scss") || filePath.endsWith(".sass")) {
         const sass = loadSassPreprocessor();
         const result = sass.renderSync({
           file: filePath,
