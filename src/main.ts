@@ -4,31 +4,48 @@ import fs from "fs";
 import { Options } from "./type";
 import { getFinalOptions, regCustomProperty } from "./util";
 
+let loadedSassPreprocessor: any;
+
 export const main = (options: Options) => {
   const finalOptions = getFinalOptions(options);
-  console.log("finalOptions :>> ", finalOptions);
   const filePaths = glob.sync(finalOptions.include, {
     ignore: finalOptions.exclude,
   });
 
-  console.log("filePaths :>> ", filePaths);
-
   let customProperties = new Set<string>();
   for (const filePath of filePaths) {
-    const buffer = fs.readFileSync(filePath);
-    const customPropertyWithValues = buffer.toString().match(regCustomProperty);
+    try {
+      const buffer = fs.readFileSync(filePath);
+      const fileContent = buffer.toString();
+      let customPropertyWithValues: RegExpMatchArray | null = null;
 
-    if (customPropertyWithValues) {
-      customPropertyWithValues.map((customPropertyWithValue) => {
-        const [customPropertyWithWhitespace, _] =
-          customPropertyWithValue.split(":");
-        const customProperty = customPropertyWithWhitespace.replaceAll(
-          /[\s\n]*/g,
-          ""
-        );
+      if (filePath.endsWith(".scss") || filePath.endsWith("sass")) {
+        const sass = loadSassPreprocessor();
+        const result = sass.renderSync({
+          file: filePath,
+          includePaths: ["node_modules"],
+        });
+        customPropertyWithValues = result.css
+          .toString()
+          .match(regCustomProperty);
+      } else {
+        customPropertyWithValues = fileContent.match(regCustomProperty);
+      }
 
-        customProperties.add(customProperty);
-      });
+      if (customPropertyWithValues) {
+        customPropertyWithValues.map((customPropertyWithValue) => {
+          const [customPropertyWithWhitespace, _] =
+            customPropertyWithValue.split(":");
+          const customProperty = customPropertyWithWhitespace.replaceAll(
+            /[\s\n]*/g,
+            ""
+          );
+
+          customProperties.add(customProperty);
+        });
+      }
+    } catch (e) {
+      console.log("e :>> ", e);
     }
   }
 
@@ -45,5 +62,23 @@ export const main = (options: Options) => {
     )} = "var(${customProperty})"\n`;
   }
 
-  fs.appendFileSync(path.resolve(finalOptions.output), outputString, {});
+  fs.writeFileSync(path.resolve(finalOptions.output), outputString, {});
+};
+
+const loadSassPreprocessor = (): any => {
+  try {
+    if (loadedSassPreprocessor) {
+      return loadedSassPreprocessor;
+    }
+    const fallbackPaths = require.resolve.paths?.("sass") || [];
+    const resolved = require.resolve("sass", {
+      paths: [__dirname, ...fallbackPaths],
+    });
+    return (loadedSassPreprocessor = require(resolved));
+  } catch (e) {
+    console.error(e);
+    throw new Error(
+      `Preprocessor dependency 'sass' not found. Did you install it?`
+    );
+  }
 };

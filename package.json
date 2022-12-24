@@ -29,11 +29,15 @@
     "@types/node": "^18.11.17",
     "esbuild": "^0.16.9",
     "prettier": "^2.8.1",
+    "sass": "^1.57.1",
     "tsx": "^3.12.1",
     "typescript": "^4.9.4"
   },
   "dependencies": {
     "commander": "^9.4.1",
     "glob": "^8.0.3"
+  },
+  "peerDependencies": {
+    "sass": "*"
   }
 }
