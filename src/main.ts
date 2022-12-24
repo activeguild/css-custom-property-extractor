@@ -28,7 +28,7 @@ export const main = async (options: Options) => {
         customPropertyWithValues = result.css
           .toString()
           .match(regCustomProperty);
-      } else if (filePath.endsWith("less")) {
+      } else if (filePath.endsWith(".less")) {
         const less = loadLessPreprocessor();
         const result = await less.render(fileContent, {
           paths: [path.dirname(filePath)],
