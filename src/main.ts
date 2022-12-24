@@ -12,7 +12,7 @@ export const main = (options: Options) => {
     ignore: finalOptions.exclude,
   });
 
-  let customProperties = new Set<string>();
+  let customProperties = new Map<string, string>();
   for (const filePath of filePaths) {
     try {
       const buffer = fs.readFileSync(filePath);
@@ -34,14 +34,16 @@ export const main = (options: Options) => {
 
       if (customPropertyWithValues) {
         customPropertyWithValues.map((customPropertyWithValue) => {
-          const [customPropertyWithWhitespace, _] =
+          const [customPropertyWithWhitespace, customPropertyValue] =
             customPropertyWithValue.split(":");
           const customProperty = customPropertyWithWhitespace.replaceAll(
             /[\s\n]*/g,
             ""
           );
 
-          customProperties.add(customProperty);
+          if (!customProperties.has(customProperty)) {
+            customProperties.set(customProperty, customPropertyValue);
+          }
         });
       }
     } catch (e) {
@@ -57,9 +59,15 @@ export const main = (options: Options) => {
   let outputString = "";
 
   for (const customProperty of customProperties) {
+    outputString = `${outputString}/**\n`;
+    outputString = `${outputString} * ${customProperty[1].replaceAll(
+      /[\n]*/g,
+      ""
+    )}\n`;
+    outputString = `${outputString} */\n`;
     outputString = `${outputString}export const ${toCamelCase(
-      customProperty
-    )} = "var(${customProperty})"\n`;
+      customProperty[0]
+    )} = "var(${customProperty[0]})"\n`;
   }
 
   fs.writeFileSync(path.resolve(finalOptions.output), outputString, {});
