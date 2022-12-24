@@ -7,6 +7,6 @@ export const getFinalOptions = (options: Options): FinalOptions => {
   return {
     include: options.include || "**/*.?(css|scss|sass)",
     exclude: options.exclude,
-    output: options.output || "./",
+    output: options.output || "./properties.ts",
   };
 };

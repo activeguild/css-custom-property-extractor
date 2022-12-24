@@ -6,9 +6,12 @@ import { getFinalOptions, regCustomProperty } from "./util";
 
 export const main = (options: Options) => {
   const finalOptions = getFinalOptions(options);
+  console.log("finalOptions :>> ", finalOptions);
   const filePaths = glob.sync(finalOptions.include, {
     ignore: finalOptions.exclude,
   });
+
+  console.log("filePaths :>> ", filePaths);
 
   let customProperties = new Set<string>();
   for (const filePath of filePaths) {
