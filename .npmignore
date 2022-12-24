@@ -6,3 +6,5 @@ samples
 .prettierrc.cjs
 tsconfig.json
 turbo.json
+.prettierrc.cjs
+.prettierignore
