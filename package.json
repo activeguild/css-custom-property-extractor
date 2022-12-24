@@ -16,9 +16,7 @@
   "scripts": {
     "build": "turbo run tsup",
     "tsup": "tsup src/cli.ts --format esm,cjs --clean",
-    "extract": "tsx ./src/main.ts",
-    "tsx": "tsx ./src/cli.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsx": "tsx ./src/cli.ts"
   },
   "repository": {
     "type": "git",
