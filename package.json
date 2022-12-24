@@ -14,7 +14,8 @@
     "ccpe": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsup src/cli.ts --format esm,cjs --clean",
+    "build": "turbo run tsup",
+    "tsup": "tsup src/cli.ts --format esm,cjs --clean",
     "extract": "tsx ./src/main.ts",
     "tsx": "tsx ./src/cli.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,9 +26,11 @@
   },
   "keywords": [
     "typescript",
-    "css",
     "extract",
-    "custom-property"
+    "custom-property",
+    "css",
+    "scss",
+    "less"
   ],
   "author": "j1ngzoue",
   "license": "MIT",
@@ -44,6 +47,7 @@
     "sass": "^1.57.1",
     "tsup": "^6.5.0",
     "tsx": "^3.12.1",
+    "turbo": "^1.6.3",
     "typescript": "^4.9.4"
   },
   "dependencies": {

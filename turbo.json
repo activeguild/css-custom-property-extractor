@@ -1,0 +1,7 @@
+{
+  "pipeline": {
+    "tsup": {
+      "outputs": ["dist/**"]
+    }
+  }
+}
