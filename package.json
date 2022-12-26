@@ -1,6 +1,6 @@
 {
   "name": "css-custom-property-extractor",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Extract css custom properties as constant values that can be used in JS.",
   "main": "dist/cli.js",
   "module": "dist/cli.mjs",
