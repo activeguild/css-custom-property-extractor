@@ -4,9 +4,10 @@ import fs from 'fs'
 import { Options } from './type'
 import { getFinalOptions, regCustomProperty, toCamelCase } from './util'
 import Sass from 'sass'
+import Less from 'less'
 
 let _loadedSassPreprocessor: typeof Sass
-let _loadedLessPreprocessor: any
+let _loadedLessPreprocessor: typeof Less
 
 export const main = async (options: Options) => {
   const finalOptions = getFinalOptions(options)
@@ -95,7 +96,7 @@ const loadSassPreprocessor = (): typeof Sass => {
   }
 }
 
-const loadLessPreprocessor = (): any => {
+const loadLessPreprocessor = (): typeof Less => {
   try {
     if (_loadedLessPreprocessor) {
       return _loadedLessPreprocessor

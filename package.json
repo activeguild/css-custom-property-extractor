@@ -38,6 +38,7 @@
   "homepage": "https://github.com/activeguild/css-custom-property-extractor#readme",
   "devDependencies": {
     "@types/glob": "^8.0.0",
+    "@types/less": "^3.0.3",
     "@types/node": "^18.11.17",
     "@types/sass": "^1.43.1",
     "css-custom-property-extractor": "^0.1.0",
