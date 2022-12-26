@@ -5,8 +5,8 @@ import { main } from './main'
 
 program
   .option('-o, --output <path>', 'output path.')
-  .option('-i, --include <path>', 'include path to glob.')
-  .option('-e, --exclude <path>', 'exclude path to glob.')
+  .option('-i, --include <path>', 'include path (glob pattern).')
+  .option('-e, --exclude <path>', 'exclude path (glob pattern).')
   .parse(process.argv)
 
 const options = program.opts<Options>()
