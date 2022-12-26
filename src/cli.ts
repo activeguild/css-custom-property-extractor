@@ -9,8 +9,5 @@ program
   .option('-e, --exclude <path>', 'exclude path to glob.')
   .parse(process.argv)
 
-console.log('program.args :>> ', program.args)
-console.log('program.opts() :>> ', program.opts<Options>())
-
 const options = program.opts<Options>()
 main(options)
