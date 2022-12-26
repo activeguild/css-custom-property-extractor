@@ -46,9 +46,9 @@ export const bsPurple = "var(--bs-purple)"
 
 ## Command options
 
-| option              | description                                                                                                                               |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| -o \<path\>         | output path.                                                                                                                              |
-| -i,--include <path> | include path (glob pattern). (default \*_/_.?(css \| scss \| sass \| less))                                                               |
-| -e,--exclude <path> | exclude path (glob pattern).                                                                                                              |
-| -v,--vite <boolean> | Read the [css-preprocessoroptions](https://vitejs.dev/config/shared-options.html#css-preprocessoroptions) property from `vite.config.ts`. |
+| option                    | description                                                                                                                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| -o \<path\>               | output path.                                                                                                                                                                                          |
+| -i,--include <path>       | include path (glob pattern). (default \*_/_.?(css \| scss \| sass \| less))                                                                                                                           |
+| -e,--exclude <path>       | exclude path (glob pattern).                                                                                                                                                                          |
+| -v,--vite <path \| false> | Specify the relative path to vite.config.<br />Read the [css-preprocessoroptions](https://vitejs.dev/config/shared-options.html#css-preprocessoroptions) property from `vite.config`. (default false) |

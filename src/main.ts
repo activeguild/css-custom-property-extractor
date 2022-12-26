@@ -1,7 +1,7 @@
 import path from 'path'
 import * as glob from 'glob'
 import fs from 'fs'
-import { Options } from './type'
+import { FinalOptions, Options } from './type'
 import { getFinalOptions, regCustomProperty, toCamelCase } from './util'
 import Sass from 'sass'
 import Less from 'less'
@@ -10,7 +10,7 @@ let _loadedSassPreprocessor: typeof Sass
 let _loadedLessPreprocessor: typeof Less
 
 export const main = async (options: Options) => {
-  const finalOptions = getFinalOptions(options)
+  const finalOptions = await getFinalOptions(options)
   const filePaths = glob.sync(finalOptions.include, {
     ignore: finalOptions.exclude,
   })
@@ -23,7 +23,7 @@ export const main = async (options: Options) => {
       let customPropertyWithValues: RegExpMatchArray | null = null
 
       if (filePath.endsWith('.scss') || filePath.endsWith('.sass')) {
-        customPropertyWithValues = sass(filePath)
+        customPropertyWithValues = sass(filePath, finalOptions)
       } else if (filePath.endsWith('.less')) {
         customPropertyWithValues = await less(filePath, fileContent)
       } else if (filePath.endsWith('.css')) {
@@ -58,9 +58,10 @@ export const main = async (options: Options) => {
   )
 }
 
-const sass = (filePath: string) => {
+const sass = (filePath: string, options: FinalOptions) => {
   const sass = loadSassPreprocessor()
   const result = sass.renderSync({
+    ...options.scss,
     file: filePath,
     includePaths: ['node_modules'],
   })
@@ -68,9 +69,14 @@ const sass = (filePath: string) => {
   return result.css.toString().match(regCustomProperty)
 }
 
-const less = async (filePath: string, fileContent: string) => {
+const less = async (
+  filePath: string,
+  fileContent: string,
+  options: FinalOptions
+) => {
   const less = loadLessPreprocessor()
   const result = await less.render(fileContent, {
+    ...options.less,
     paths: [path.dirname(filePath)],
   })
 
