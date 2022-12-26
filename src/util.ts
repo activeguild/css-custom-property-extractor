@@ -11,7 +11,9 @@ export const getFinalOptions = (options: Options): FinalOptions => {
   }
 }
 
-export const toCamelCase = (target: string) =>
-  target
+export const toCamelCase = (target: string) => {
+  return target
+    .replace('--', '')
     .replace(/^[A-Z]/, (m) => m.toLowerCase())
     .replace(/[-_ ./~ ]+([A-z0-9])/g, (m, $1) => $1.toUpperCase())
+}
