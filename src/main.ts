@@ -26,24 +26,26 @@ export const main = async (options: Options) => {
         customPropertyWithValues = sass(filePath)
       } else if (filePath.endsWith('.less')) {
         customPropertyWithValues = await less(filePath, fileContent)
-      } else {
+      } else if (filePath.endsWith('.css')) {
         customPropertyWithValues = fileContent.match(regCustomProperty)
       }
 
-      if (customPropertyWithValues) {
-        customPropertyWithValues.map((customPropertyWithValue) => {
-          const [customPropertyWithWhitespace, customPropertyValue] =
-            customPropertyWithValue.split(':')
-          const customProperty = customPropertyWithWhitespace.replaceAll(
-            /[\s\n]*/g,
-            ''
-          )
-
-          if (!customProperties.has(customProperty)) {
-            customProperties.set(customProperty, customPropertyValue)
-          }
-        })
+      if (!customPropertyWithValues) {
+        continue
       }
+
+      customPropertyWithValues.map((customPropertyWithValue) => {
+        const [customPropertyKeyWithWhitespace, customPropertyValue] =
+          customPropertyWithValue.split(':')
+        const customPropertyKey = customPropertyKeyWithWhitespace.replaceAll(
+          /[\s\n]*/g,
+          ''
+        )
+
+        if (!customProperties.has(customPropertyKey)) {
+          customProperties.set(customPropertyKey, customPropertyValue)
+        }
+      })
     } catch (e) {
       console.log('e :>> ', e)
     }
@@ -62,10 +64,8 @@ const sass = (filePath: string) => {
     file: filePath,
     includePaths: ['node_modules'],
   })
-  const customPropertyWithValues = result.css
-    .toString()
-    .match(regCustomProperty)
-  return customPropertyWithValues
+
+  return result.css.toString().match(regCustomProperty)
 }
 
 const less = async (filePath: string, fileContent: string) => {
@@ -74,8 +74,7 @@ const less = async (filePath: string, fileContent: string) => {
     paths: [path.dirname(filePath)],
   })
 
-  const customPropertyWithValues = result.css.match(regCustomProperty)
-  return customPropertyWithValues
+  return result.css.match(regCustomProperty)
 }
 
 const loadSassPreprocessor = (): typeof Sass => {
