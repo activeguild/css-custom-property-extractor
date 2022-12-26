@@ -25,7 +25,11 @@ export const main = async (options: Options) => {
       if (filePath.endsWith('.scss') || filePath.endsWith('.sass')) {
         customPropertyWithValues = sass(filePath, finalOptions)
       } else if (filePath.endsWith('.less')) {
-        customPropertyWithValues = await less(filePath, fileContent)
+        customPropertyWithValues = await less(
+          filePath,
+          fileContent,
+          finalOptions
+        )
       } else if (filePath.endsWith('.css')) {
         customPropertyWithValues = fileContent.match(regCustomProperty)
       }
