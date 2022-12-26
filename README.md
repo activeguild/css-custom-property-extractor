@@ -30,15 +30,19 @@ npx ccpe -i ./samples/scss/bootstrap.scss
 /**
  *  #0d6efd;
  */
-export const BsBlue = "var(--bs-blue)"
+export const bsBlue = "var(--bs-blue)"
 /**
  *  #6610f2;
  */
-export const BsIndigo = "var(--bs-indigo)"
+export const bsIndigo = "var(--bs-indigo)"
 /**
  *  #6f42c1;
  */
-export const BsPurple = "var(--bs-purple)"
+export const bsPurple = "var(--bs-purple)"
+/**
+ *  #d63384;
+ */
+export const bsPink = "var(--bs-pink)"
 ...
 ```
 
