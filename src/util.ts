@@ -10,3 +10,8 @@ export const getFinalOptions = (options: Options): FinalOptions => {
     output: options.output || './properties.ts',
   }
 }
+
+export const toCamelCase = (target: string) =>
+  target
+    .replace(/^[A-Z]/, (m) => m.toLowerCase())
+    .replace(/[-_ ./~ ]+([A-z0-9])/g, (m, $1) => $1.toUpperCase())

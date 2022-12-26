@@ -2,9 +2,10 @@ import path from 'path'
 import * as glob from 'glob'
 import fs from 'fs'
 import { Options } from './type'
-import { getFinalOptions, regCustomProperty } from './util'
+import { getFinalOptions, regCustomProperty, toCamelCase } from './util'
 
-let loadedSassPreprocessor: any
+let _loadedSassPreprocessor: any
+let _loadedLessPreprocessor: any
 
 export const main = async (options: Options) => {
   const finalOptions = getFinalOptions(options)
@@ -20,21 +21,9 @@ export const main = async (options: Options) => {
       let customPropertyWithValues: RegExpMatchArray | null = null
 
       if (filePath.endsWith('.scss') || filePath.endsWith('.sass')) {
-        const sass = loadSassPreprocessor()
-        const result = sass.renderSync({
-          file: filePath,
-          includePaths: ['node_modules'],
-        })
-        customPropertyWithValues = result.css
-          .toString()
-          .match(regCustomProperty)
+        customPropertyWithValues = sass(filePath)
       } else if (filePath.endsWith('.less')) {
-        const less = loadLessPreprocessor()
-        const result = await less.render(fileContent, {
-          paths: [path.dirname(filePath)],
-        })
-
-        customPropertyWithValues = result.css.match(regCustomProperty)
+        customPropertyWithValues = await less(filePath, fileContent)
       } else {
         customPropertyWithValues = fileContent.match(regCustomProperty)
       }
@@ -58,11 +47,72 @@ export const main = async (options: Options) => {
     }
   }
 
-  const toCamelCase = (target: string) =>
-    target
-      .replace(/^[A-Z]/, (m) => m.toLowerCase())
-      .replace(/[-_ ./~ ]+([A-z0-9])/g, (m, $1) => $1.toUpperCase())
+  fs.writeFileSync(
+    path.resolve(finalOptions.output),
+    generateOutputString(customProperties),
+    {}
+  )
+}
 
+const sass = (filePath: string) => {
+  const sass = loadSassPreprocessor()
+  const result = sass.renderSync({
+    file: filePath,
+    includePaths: ['node_modules'],
+  })
+  const customPropertyWithValues = result.css
+    .toString()
+    .match(regCustomProperty)
+  return customPropertyWithValues
+}
+
+const less = async (filePath: string, fileContent: string) => {
+  const less = loadLessPreprocessor()
+  const result = await less.render(fileContent, {
+    paths: [path.dirname(filePath)],
+  })
+
+  const customPropertyWithValues = result.css.match(regCustomProperty)
+  return customPropertyWithValues
+}
+
+const loadSassPreprocessor = (): any => {
+  try {
+    if (_loadedSassPreprocessor) {
+      return _loadedSassPreprocessor
+    }
+    const fallbackPaths = require.resolve.paths?.('sass') || []
+    const resolved = require.resolve('sass', {
+      paths: [__dirname, ...fallbackPaths],
+    })
+    return (_loadedSassPreprocessor = require(resolved))
+  } catch (e) {
+    console.error(e)
+    throw new Error(
+      `Preprocessor dependency 'sass' not found. Did you install it?`
+    )
+  }
+}
+
+const loadLessPreprocessor = (): any => {
+  try {
+    if (_loadedLessPreprocessor) {
+      return _loadedLessPreprocessor
+    }
+    const fallbackPaths = require.resolve.paths?.('less') || []
+    const resolved = require.resolve('less', {
+      paths: [__dirname, ...fallbackPaths],
+    })
+    return (_loadedLessPreprocessor = require(resolved))
+  } catch (e) {
+    console.error(e)
+    throw new Error(
+      `Preprocessor dependency 'less' not found. Did you install it?`
+    )
+  }
+}
+
+const generateOutputString = (customProperties: Map<string, string>) => {
   let outputString = ''
 
   for (const customProperty of customProperties) {
@@ -76,42 +126,5 @@ export const main = async (options: Options) => {
       customProperty[0]
     )} = "var(${customProperty[0]})"\n`
   }
-
-  fs.writeFileSync(path.resolve(finalOptions.output), outputString, {})
-}
-
-const loadSassPreprocessor = (): any => {
-  try {
-    if (loadedSassPreprocessor) {
-      return loadedSassPreprocessor
-    }
-    const fallbackPaths = require.resolve.paths?.('sass') || []
-    const resolved = require.resolve('sass', {
-      paths: [__dirname, ...fallbackPaths],
-    })
-    return (loadedSassPreprocessor = require(resolved))
-  } catch (e) {
-    console.error(e)
-    throw new Error(
-      `Preprocessor dependency 'sass' not found. Did you install it?`
-    )
-  }
-}
-
-const loadLessPreprocessor = (): any => {
-  try {
-    if (loadedSassPreprocessor) {
-      return loadedSassPreprocessor
-    }
-    const fallbackPaths = require.resolve.paths?.('less') || []
-    const resolved = require.resolve('less', {
-      paths: [__dirname, ...fallbackPaths],
-    })
-    return (loadedSassPreprocessor = require(resolved))
-  } catch (e) {
-    console.error(e)
-    throw new Error(
-      `Preprocessor dependency 'less' not found. Did you install it?`
-    )
-  }
+  return outputString
 }
