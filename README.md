@@ -39,18 +39,7 @@ export const BsIndigo = "var(--bs-indigo)"
  *  #6f42c1;
  */
 export const BsPurple = "var(--bs-purple)"
-/**
- *  #d63384;
- */
-export const BsPink = "var(--bs-pink)"
-/**
- *  #dc3545;
- */
-export const BsRed = "var(--bs-red)"
-/**
- *  #fd7e14;
- */
-export const BsOrange = "var(--bs-orange)"
-/**
 ...
 ```
+
+3. Import and use the output typescript file.
