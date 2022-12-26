@@ -3,8 +3,9 @@ import * as glob from 'glob'
 import fs from 'fs'
 import { Options } from './type'
 import { getFinalOptions, regCustomProperty, toCamelCase } from './util'
+import Sass from 'sass'
 
-let _loadedSassPreprocessor: any
+let _loadedSassPreprocessor: typeof Sass
 let _loadedLessPreprocessor: any
 
 export const main = async (options: Options) => {
@@ -76,7 +77,7 @@ const less = async (filePath: string, fileContent: string) => {
   return customPropertyWithValues
 }
 
-const loadSassPreprocessor = (): any => {
+const loadSassPreprocessor = (): typeof Sass => {
   try {
     if (_loadedSassPreprocessor) {
       return _loadedSassPreprocessor

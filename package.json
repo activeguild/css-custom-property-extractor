@@ -39,6 +39,7 @@
   "devDependencies": {
     "@types/glob": "^8.0.0",
     "@types/node": "^18.11.17",
+    "@types/sass": "^1.43.1",
     "css-custom-property-extractor": "^0.1.0",
     "esbuild": "^0.16.9",
     "less": "^4.1.3",
