@@ -39,11 +39,16 @@ export const bsIndigo = "var(--bs-indigo)"
  *  #6f42c1;
  */
 export const bsPurple = "var(--bs-purple)"
-/**
- *  #d63384;
- */
-export const bsPink = "var(--bs-pink)"
 ...
 ```
 
 3. Import and use the output typescript file.
+
+## Command options
+
+| option              | description                                                                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| -o \<path\>         | output path.                                                                                                                              |
+| -i,--include <path> | include path (glob pattern). (default \*_/_.?(css \| scss \| sass \| less))                                                               |
+| -e,--exclude <path> | exclude path (glob pattern).                                                                                                              |
+| -v,--vite <boolean> | Read the [css-preprocessoroptions](https://vitejs.dev/config/shared-options.html#css-preprocessoroptions) property from `vite.config.ts`. |
