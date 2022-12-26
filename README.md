@@ -10,6 +10,7 @@
 - Parse css custom properties and output typescript files.By importing the output typescript files<br/>
   ,custom properties can be used type-safely in various libraries.
 - Supports `css` and `sass` and `less`.
+- If you are in a vite environment, use the `css-preprocessoroptions` in `vite.config`.
 
 ## Usage
 
